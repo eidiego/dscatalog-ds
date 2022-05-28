@@ -58,8 +58,7 @@ public class CategoryService {
 		}
 		catch (EntityNotFoundException e){
 			throw new ResourceNotFoundException("Id not found " + id);
-		}
-		
+		}		
 	}
 
 	public void delete(Long id) {
@@ -72,8 +71,6 @@ public class CategoryService {
 		catch(DataIntegrityViolationException e) {
 			throw new DatabaseException("Integrity violation");
 		}
-		
-		
 	}
 
 }
