@@ -1,3 +1,3 @@
 # dscatalog-ds
 
-Java e Spring Boot
+Java 11 e Spring Boot
