@@ -45,9 +45,7 @@ public class ProductServiceTests {
 	@Test
 	public void deleteShouldThrowDataIntegrityViolationExceptionWhenDependentId() {
 
-		Assertions.assertThrows(DatabaseException.class, () -> {
-			service.delete(dependentId);
-		});
+		Assertions.assertThrows(DatabaseException.class, () -> service.delete(dependentId));
 
 		Mockito.verify(repository, Mockito.times(1)).deleteById(dependentId);
 	}
@@ -55,9 +53,7 @@ public class ProductServiceTests {
 	@Test
 	public void deleteShouldDoNothingWhenIdExists() {
 
-		Assertions.assertDoesNotThrow(() -> {
-			service.delete(existingId);
-		});
+		Assertions.assertDoesNotThrow(() ->	service.delete(existingId));
 
 		Mockito.verify(repository, Mockito.times(1)).deleteById(existingId);
 	}
@@ -65,9 +61,7 @@ public class ProductServiceTests {
 	@Test
 	public void deleteShouldThrowResourceNotFoundExceptionWhenIdExists() {
 
-		Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-			service.delete(nonExistingId);
-		});
+		Assertions.assertThrows(ResourceNotFoundException.class, () -> service.delete(nonExistingId));
 
 		Mockito.verify(repository, Mockito.times(1)).deleteById(nonExistingId);
 	}
