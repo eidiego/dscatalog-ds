@@ -45,6 +45,8 @@ public class ProductService {
 		
 	}
 
+
+
 	@Transactional
 	public ProductDTO insert(ProductDTO dto) {
 		Product entity = new Product();
@@ -79,6 +81,7 @@ public class ProductService {
 			throw new DatabaseException("Integrity violation");
 		}
 	}
+
 
 	private void copyDtoToEntity(ProductDTO dto, Product entity) {
 		entity.setName(dto.getName());
