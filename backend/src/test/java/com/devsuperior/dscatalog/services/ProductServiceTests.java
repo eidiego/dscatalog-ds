@@ -3,6 +3,7 @@ package com.devsuperior.dscatalog.services;
 import com.devsuperior.dscatalog.dto.ProductDTO;
 import com.devsuperior.dscatalog.entities.Product;
 import com.devsuperior.dscatalog.tests.Factory;
+import org.checkerframework.common.value.qual.StaticallyExecutable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,20 @@ public class ProductServiceTests {
 
 		Mockito.doThrow(DataIntegrityViolationException.class).when(repository).deleteById(dependentId);
 
+	}
+
+	@Test
+	public void findByIdShouldReturnProductDTOWhenIdExists() {
+		Optional<Product> result = repository.findById(existingId);
+		result.isPresent();
+		Assertions.assertTrue(result.isPresent());
+	}
+
+	@Test
+	public void findByIdShouldReturnResourceNotFoundExceptionWhenIdNotExists() {
+		Optional<Product> result = repository.findById(nonExistingId);
+		result.isEmpty();
+		Assertions.assertTrue(result.isEmpty());
 	}
 
 	@Test
