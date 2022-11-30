@@ -20,7 +20,6 @@ import com.devsuperior.dscatalog.dto.ProductDTO;
 import com.devsuperior.dscatalog.services.ProductService;
 
 
-
 @RestController
 @RequestMapping(value = "/products")
 public class ProductResource {
