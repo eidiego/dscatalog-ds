@@ -63,7 +63,7 @@ public class ProductRepositoryTests {
 	@Test
 	public void deleteShouldDeleteObjectWhenIdExists() {
 		
-		repository.deleteById(1L);
+		repository.deleteById(exintingId);
 		
 		Optional<Product> result = repository.findById(exintingId);
 		Assertions.assertFalse(result.isPresent());

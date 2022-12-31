@@ -40,11 +40,10 @@ public class ProductService {
 	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id) {
 		Optional<Product> obj = repository.findById(id);
-		Product entity = obj.orElseThrow(() -> new EntityNotFoundException("Entity not found"));
+		Product entity = obj.orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
 		return new ProductDTO(entity, entity.getCategories());
 		
 	}
-
 
 
 	@Transactional
@@ -69,6 +68,7 @@ public class ProductService {
 		}
 		
 	}
+	
 
 	public void delete(Long id) {
 		try {
