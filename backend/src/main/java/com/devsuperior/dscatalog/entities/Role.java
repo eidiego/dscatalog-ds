@@ -1,6 +1,9 @@
 package com.devsuperior.dscatalog.entities;
 
-public class Role {
+import java.io.Serializable;
+
+public class Role implements Serializable{
+	private static final long serialVersionUID = 1L;
 	
 	private Long id;
 	private String authority;
@@ -9,7 +12,6 @@ public class Role {
 	}
 
 	public Role(Long id, String authority) {
-		super();
 		this.id = id;
 		this.authority = authority;
 	}

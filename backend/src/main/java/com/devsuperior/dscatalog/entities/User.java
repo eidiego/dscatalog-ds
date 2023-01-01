@@ -1,17 +1,23 @@
 package com.devsuperior.dscatalog.entities;
 
-public class User {
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
+public class User implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
 	private Long id;
 	private String firstName;
 	private String lastName;
 	private String email;
 	private String password;
 	
+	private Set<Role> roles = new HashSet<>();
 	
 	public User() {
 	}
-
 
 	public User(Long id, String firstName, String lastName, String email, String password) {
 		super();
@@ -71,6 +77,30 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(id, other.id);
+	}
+	
+	
 	
 	
 	
