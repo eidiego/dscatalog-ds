@@ -19,7 +19,6 @@ public class ProductDTO  implements Serializable {
 
 	private Long id;
 	
-	
 	@NotBlank(message = "Esse campo é obrigatório!")
 	private String name;
 	
