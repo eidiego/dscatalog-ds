@@ -18,64 +18,47 @@ public class ProductRepositoryTests {
 	@Autowired
 	private ProductRepository repository;
 	
-	private long exintingId;
+	private long existingId;
 	private long nonExistingId;
 	private long countTotalProducts;
-
+	
 	@BeforeEach
 	void setUp() throws Exception {
-
-		exintingId = 1L;
+		existingId = 1L;
 		nonExistingId = 1000L;
-		countTotalProducts = repository.findAll().size();
-				
-	}
-	
-	@Test
-	public void findByIdShouldReturnNonEmptyOptionalWhenIdExists() {
-		
-		Optional<Product> result = repository.findById(exintingId);
-		result.isPresent();
-		Assertions.assertTrue(result.isPresent());
-		
-	}
-	
-	@Test
-	public void findByIdShouldReturnEmptyOptionalWhenIdDoesNotExists() {
-		
-		Optional<Product> result = repository.findById(nonExistingId);
-		result.isEmpty();
-		Assertions.assertTrue(result.isEmpty());
-		
+		countTotalProducts = 25L;
 	}
 	
 	@Test
 	public void saveShouldPersistWithAutoincrementWhenIdIsNull() {
-		
+
 		Product product = Factory.createProduct();
 		product.setId(null);
-		product = repository.save(product);
-		Assertions.assertNotNull(product.getId());
-		Assertions.assertEquals(countTotalProducts + 1, product.getId());
 		
+		product = repository.save(product);
+		Optional<Product> result = repository.findById(product.getId());
+		
+		Assertions.assertNotNull(product.getId());
+		Assertions.assertEquals(countTotalProducts + 1L, product.getId());
+		Assertions.assertTrue(result.isPresent());
+		Assertions.assertSame(result.get(), product);
 	}
 	
 	@Test
 	public void deleteShouldDeleteObjectWhenIdExists() {
 		
-		repository.deleteById(exintingId);
+		repository.deleteById(existingId);
+
+		Optional<Product> result = repository.findById(existingId);
 		
-		Optional<Product> result = repository.findById(exintingId);
 		Assertions.assertFalse(result.isPresent());
 	}
 	
-	@Test 
+	@Test
 	public void deleteShouldThrowEmptyResultDataAccessExceptionWhenIdDoesNotExist() {
-		
-		
+
 		Assertions.assertThrows(EmptyResultDataAccessException.class, () -> {
-			repository.deleteById(nonExistingId);
+			repository.deleteById(nonExistingId);			
 		});
-		
 	}
 }

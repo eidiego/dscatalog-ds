@@ -1,10 +1,10 @@
-package com.devsuperior.dscatalog.services.exceptions;
+package com.devsuperior.dscatalog.resources.exceptions;
 
 import java.io.Serializable;
 
 public class FieldMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
 	private String fieldName;
 	private String message;
 	
@@ -12,6 +12,7 @@ public class FieldMessage implements Serializable {
 	}
 
 	public FieldMessage(String fieldName, String message) {
+		super();
 		this.fieldName = fieldName;
 		this.message = message;
 	}
@@ -31,6 +32,4 @@ public class FieldMessage implements Serializable {
 	public void setMessage(String message) {
 		this.message = message;
 	}
-	
-
 }

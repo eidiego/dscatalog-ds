@@ -22,79 +22,74 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-public class ProductResourceIntegrationT {
-	
+public class ProductResourceIT {
+
 	@Autowired
 	private MockMvc mockMvc;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
 	
-	private long existingId;
-	private long nonExistingId;
-	private long countTotalProducts;
-	
+	private Long existingId;
+	private Long nonExistingId;
+	private Long countTotalProducts;
 	
 	@BeforeEach
 	void setUp() throws Exception {
-		
 		existingId = 1L;
 		nonExistingId = 1000L;
 		countTotalProducts = 25L;
-		
 	}
 	
 	@Test
 	public void findAllShouldReturnSortedPageWhenSortByName() throws Exception {
 		
 		ResultActions result = 
-				 mockMvc.perform(get("/products/?page=0&size=12&sort=name,asc")
-						.accept(MediaType.APPLICATION_JSON));
+				mockMvc.perform(get("/products?page=0&size=12&sort=name,asc")
+					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isOk());
-		result.andExpect(jsonPath("$.content").exists());
 		result.andExpect(jsonPath("$.totalElements").value(countTotalProducts));
+		result.andExpect(jsonPath("$.content").exists());		
+		result.andExpect(jsonPath("$.content[0].name").value("Macbook Pro"));
+		result.andExpect(jsonPath("$.content[1].name").value("PC Gamer"));
+		result.andExpect(jsonPath("$.content[2].name").value("PC Gamer Alfa"));		
+	}
+	
+	
+	@Test
+	public void updateShouldReturnProductDTOWhenIdExists() throws Exception {
 		
+		ProductDTO productDTO = Factory.createProductDTO();
+		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
+		String expectedName = productDTO.getName();
+		String expectedDescription = productDTO.getDescription();
+		
+		ResultActions result = 
+				mockMvc.perform(put("/products/{id}", existingId)
+					.content(jsonBody)
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isOk());
+		result.andExpect(jsonPath("$.id").value(existingId));
+		result.andExpect(jsonPath("$.name").value(expectedName));
+		result.andExpect(jsonPath("$.description").value(expectedDescription));
 	}
 	
 	@Test
-	public void updateShouldReturnProductWhenIdExists() throws Exception {
+	public void updateShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
 		
-		ProductDTO productDTO = Factory.createProductDTO();		
+		ProductDTO productDTO = Factory.createProductDTO();
 		String jsonBody = objectMapper.writeValueAsString(productDTO);
 		
-		String expectedName = productDTO.getName();
-		
 		ResultActions result = 
-		 mockMvc.perform(put("/products/{id}", existingId)
-				.content(jsonBody)
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON));
-				
-		result.andExpect(status().isOk());		
-		result.andExpect(jsonPath("$.id").exists());		
-		result.andExpect(jsonPath("$.id").value(existingId));		
-		result.andExpect(jsonPath("$.name").value(expectedName));
-		result.andExpect(jsonPath("$.description").exists());
+				mockMvc.perform(put("/products/{id}", nonExistingId)
+					.content(jsonBody)
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON));
+		
+		result.andExpect(status().isNotFound());
 	}
-	
-	@Test	
-	public void updateShouldReturnNotFoundWhenIdDoesNotExists() throws Exception {
-		
-		ProductDTO productDTO = Factory.createProductDTO();		
-		String jsonBody = objectMapper.writeValueAsString(productDTO);
-		
-		String expectedName = productDTO.getName();
-		
-		ResultActions result = 
-		 mockMvc.perform(put("/products/{id}", nonExistingId)
-				.content(jsonBody)
-				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON));
-				
-		result.andExpect(status().isNotFound());		
-   }
-		
-
 }

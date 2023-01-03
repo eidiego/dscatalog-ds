@@ -19,24 +19,22 @@ import javax.persistence.Table;
 @Table(name = "tb_category")
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	
-	@Id 
+
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant createdAt;
-	
+
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updatedAt;
-	
-	@ManyToMany(mappedBy= "categories")
+
+	@ManyToMany(mappedBy = "categories")
 	private Set<Product> products = new HashSet<>();
 	
 	public Category() {
-		
 	}
 
 	public Category(Long id, String name) {
@@ -56,39 +54,32 @@ public class Category implements Serializable {
 		return name;
 	}
 
-
 	public void setName(String name) {
 		this.name = name;
 	}
 	
-	
-
 	public Instant getCreatedAt() {
 		return createdAt;
 	}
 
-
 	public Instant getUpdatedAt() {
 		return updatedAt;
 	}
-	
+
 	@PrePersist
 	public void prePersist() {
 		createdAt = Instant.now();
-		
 	}
 	
 	@PreUpdate
 	public void preUpdate() {
 		updatedAt = Instant.now();
-		
 	}
-	
+
 	public Set<Product> getProducts() {
 		return products;
 	}
-
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -96,7 +87,6 @@ public class Category implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
 
 	@Override
 	public boolean equals(Object obj) {
@@ -114,8 +104,4 @@ public class Category implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
-	
 }
